@@ -1,6 +1,7 @@
 from config import *
 import requests
 from pprint import pprint
+import threading
 
 
 
@@ -10,13 +11,25 @@ VERSION      = 5.103
 
 
 
+# Отдельный поток - обёртка для последующих функций
+def thread(my_func):
+    def wrapper(*args, **kwargs):
+        my_thread = threading.Thread (target=my_func, args=args, kwargs=kwargs)
+        my_thread.start ()
+
+    return wrapper
+
+
+
 class User:
     def __init__(self, id):
         self.id = id
 
 
+    # при вызове функции print(user) вывод ссылки на его профиль в VK
     def __str__(self):
         return f'https://vk.com/id{self.id}'
+
 
     # отправка request'a / получение response'а
     def get_response(self, url, params):
@@ -88,6 +101,30 @@ class User:
         return data['response']
 
 
+    # найти друга с которым больше всего общих друзей
+    @thread
+    def get_most_of_common_friends(self):
+        max_count_of_friends = 0
+        max_friends_id = 0
+
+        friends_list = self.get_friends(self.id)
+
+        for friend in friends_list:
+            print('.', end='')
+            try:
+                comm_f_count = len(self.get_common_friends(self.id, friend))
+                friend_id = User(friend).id
+
+                if common_f_count > max_count_of_friends:
+                    max_count_of_friends = common_f_count
+                    max_friends_id = friend_id
+            except:
+                pass
+
+        print(f'\nбольше всего общих друзей с пользователем: {max_friends_id}')
+        print(max_count_of_friends)
+
+
 
 def main():
     try:
@@ -106,4 +143,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    pass
