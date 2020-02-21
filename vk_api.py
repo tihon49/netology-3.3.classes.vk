@@ -6,14 +6,8 @@ from pprint import pprint
 
 access_token = APP_TOKEN        # токен приложения
 app_id       = APP_ID           # id приложения
-
-
-DOMAIN       = 'vindevi'
-USER         = 148226630 # Ден
-MY_USER_ID   = 4305103   # мой ID
 VERSION      = 5.103
-METHOD       = 'users.getSubscriptions' # варианты запросов: 'friends.getOnline' / 'users.get' / 'friends.get'
-                                        # пример:  url = f'https://api.vk.com/method/{METHOD}'
+
 
 
 class User:
@@ -25,6 +19,7 @@ class User:
         response = requests.get(url, params=params)
         data = response.json()
         return data
+
 
     # получаем список групп пользователя. type => list
     def get_groups_names(self):
@@ -39,6 +34,7 @@ class User:
         data = self.get_response(url, params)
         groups = data['response']['items']
         return [group['name'] for group in groups]
+
 
     # получаем список с друзьями. type => list
     def get_friends(self, user_id): 
@@ -61,12 +57,19 @@ class User:
         user_1_friends = self.get_friends(user_1)
         user_2_friends = self.get_friends(user_2)
         common_friends = []
+        common_friends_classes = []
 
         for friend in user_1_friends:
             if friend in user_2_friends:
                 common_friends.append(friend)
 
-        return common_friends
+        for i in common_friends:
+            user_name = str(i)
+            user_name = User(i)
+            common_friends_classes.append(user_name)
+
+        return common_friends_classes
+
 
     # получаем список друзей онлайн. type => dict
     def get_friends_online(self):
@@ -82,9 +85,13 @@ class User:
 
 
 
-Den   = User(USER)
-Tihon = User(MY_USER_ID)
+if __name__ == '__main__':
+    try:
+        user_input = input('введите команду в виде: "id_user_1 & id_user_2": ').split('&')
+        user1 = User(int(user_input[0]))
+        user2 = User(int(user_input[1]))
 
+        pprint(user1.get_common_friends(user1.id, user2.id))
 
-
-pprint(Den.get_common_friends(Den.id, Tihon.id))
+    except Exception as e:
+        print(f'error: {e}')
