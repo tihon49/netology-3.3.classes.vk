@@ -89,7 +89,7 @@ class User:
 
 
 
-def dz_number_2():
+def main():
     try:
         user_input = input('введите команду в виде: "id_user_1 & id_user_2": ').split('&')
         user1 = User(int(user_input[0]))
@@ -106,4 +106,4 @@ def dz_number_2():
 
 
 if __name__ == '__main__':
-    dz_number_2()
+    main()
