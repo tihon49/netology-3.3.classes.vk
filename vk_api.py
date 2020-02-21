@@ -87,4 +87,4 @@ Tihon = User(MY_USER_ID)
 
 
 
-pprint(Den.get_common_friends(USER, MY_USER_ID))
+pprint(Den.get_common_friends(Den.id, Tihon.id))
