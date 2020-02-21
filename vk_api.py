@@ -74,18 +74,12 @@ class User:
         user_1_friends = self.get_friends(user_1)
         user_2_friends = self.get_friends(user_2)
         common_friends = []
-        common_friends_classes = []
 
         for friend in user_1_friends:
             if friend in user_2_friends:
-                common_friends.append(friend)
-
-        for i in common_friends:
-            user_name = str(i)
-            user_name = User(i)
-            common_friends_classes.append(user_name)
-
-        return common_friends_classes
+                common_friends.append(User(friend))
+ 
+        return common_friends
 
 
     # получаем список друзей онлайн. type => dict
@@ -132,6 +126,7 @@ def main():
         user1 = User(int(user_input[0]))
         user2 = User(int(user_input[1]))
 
+        # вывод общих друзей в виде экземпляров класса
         pprint(user1.get_common_friends(user1.id, user2.id))
 
         print(f'\nссылка на пользователя №1: {user1}')
