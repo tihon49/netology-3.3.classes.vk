@@ -14,6 +14,10 @@ class User:
     def __init__(self, id):
         self.id = id
 
+
+    def __str__(self):
+        return f'https://vk.com/id{self.id}'
+
     # отправка request'a / получение response'а
     def get_response(self, url, params):
         response = requests.get(url, params=params)
@@ -85,7 +89,7 @@ class User:
 
 
 
-if __name__ == '__main__':
+def dz_number_2():
     try:
         user_input = input('введите команду в виде: "id_user_1 & id_user_2": ').split('&')
         user1 = User(int(user_input[0]))
@@ -93,5 +97,13 @@ if __name__ == '__main__':
 
         pprint(user1.get_common_friends(user1.id, user2.id))
 
+        print(f'\nссылка на пользователя №1: {user1}')
+        print(f'ссылка на пользователя №2: {user2}')
+
     except Exception as e:
         print(f'error: {e}')
+
+
+
+if __name__ == '__main__':
+    dz_number_2()
