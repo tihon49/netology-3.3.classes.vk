@@ -110,12 +110,10 @@ class User:
         friends_list = self.get_friends(self.id)
 
         for friend in friends_list:
-            print('.', end='')
             try:
+                print('.', end='')
                 common_f_count = len(self.get_common_friends(self.id, friend))
                 friend_id = User(friend).id
-
-                print(f'')
 
                 if common_f_count > max_count_of_friends:
                     max_count_of_friends = common_f_count
