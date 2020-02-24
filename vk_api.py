@@ -20,21 +20,23 @@ def thread(my_func):
     return wrapper
 
 
-
+# Задача №1
 class User:
     def __init__(self, id):
         self.id = id
 
 
+    # Задача №3
     # при вызове функции print(user) вывод ссылки на его профиль в VK
     def __str__(self):
         return f'https://vk.com/id{self.id}'
 
 
+    # Задача №2
     # битовое И (x & y)
     def __and__(self, user2):
-        user_1_friends = self.get_friends(self.id)
-        user_2_friends = user2.get_friends(user2.id)
+        user_1_friends = self.get_friends()
+        user_2_friends = user2.get_friends()
         common_friends = []
 
         for friend in user_1_friends:
@@ -67,11 +69,11 @@ class User:
 
 
     # получаем список с друзьями. type => list
-    def get_friends(self, user_id): 
+    def get_friends(self): 
         url = f'https://api.vk.com/method/friends.get'
         params = {'access_token': access_token,
                   'v': VERSION,
-                  'user_id': user_id,
+                  'user_id': self.id,
                   'order': 'hints',
                   'fields': 'nickname,domain,city,photo_200_orig,online',
                   'name_case': 'nom'
