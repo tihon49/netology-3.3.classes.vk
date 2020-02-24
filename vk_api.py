@@ -31,6 +31,19 @@ class User:
         return f'https://vk.com/id{self.id}'
 
 
+    # битовое И (x & y)
+    def __and__(self, user2):
+        user_1_friends = self.get_friends(self.id)
+        user_2_friends = user2.get_friends(user2.id)
+        common_friends = []
+
+        for friend in user_1_friends:
+            if friend in user_2_friends:
+                common_friends.append(User(friend))
+ 
+        return common_friends
+
+
     # отправка request'a / получение response'а
     def get_response(self, url, params):
         response = requests.get(url, params=params)
@@ -69,19 +82,6 @@ class User:
         return friends_id
 
 
-    # полчучаем список общих друзей у двух пользователей. type => list
-    def get_common_friends(self, user_1, user_2):
-        user_1_friends = self.get_friends(user_1)
-        user_2_friends = self.get_friends(user_2)
-        common_friends = []
-
-        for friend in user_1_friends:
-            if friend in user_2_friends:
-                common_friends.append(User(friend))
- 
-        return common_friends
-
-
     # получаем список друзей онлайн. type => dict
     def get_friends_online(self):
         url = 'https://api.vk.com/method/friends.getOnline?v=5.52&access_token='
@@ -105,7 +105,6 @@ class User:
 
         for friend in friends_list:
             try:
-                print('.', end='')
                 common_f_count = len(self.get_common_friends(self.id, friend))
                 friend_id = User(friend).id
 
@@ -114,21 +113,23 @@ class User:
                     max_friends_id = friend_id
             except:
                 pass
+            else:
+                print('.', end='')
 
-        print(f'\nбольше всего общих друзей с пользователем: {max_friends_id}')
-        print(max_count_of_friends)
+        print(f'\nбольше всего общих друзей с пользователем: id{max_friends_id} - {max_count_of_friends}')
 
 
 
 def main():
     try:
-        user_input = input('введите команду в виде: "id_user_1 & id_user_2": ').split('&')
+        user_input = input('введите два id номера через пробел для поиска общих друзей: ').split()
         user1 = User(int(user_input[0]))
         user2 = User(int(user_input[1]))
 
-        # вывод общих друзей в виде экземпляров класса
-        pprint(user1.get_common_friends(user1.id, user2.id))
+        # вывод общих друзей в виде экземпляров класса с помощью метода  __and__(self, other)
+        pprint(user1 & user2)
 
+        # выводим ссылку на профиль пользователя с помощью метода  __str__(self)
         print(f'\nссылка на пользователя №1: {user1}')
         print(f'ссылка на пользователя №2: {user2}')
 
