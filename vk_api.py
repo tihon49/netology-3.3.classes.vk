@@ -22,8 +22,23 @@ def thread(my_func):
 
 # Задача №1
 class User:
-    def __init__(self, id):
-        self.id = id
+    def __init__(self, u_id):
+        # если указан не id, а строковой аналог, приводим его к числовому id
+        try:
+            self.id = u_id
+            if str(self.id).isdigit():
+                pass
+            else:
+                url = 'https://api.vk.com/method/users.get'
+                params = {'access_token': access_token,
+                          'user_ids': self.id,
+                          'v': VERSION
+                         }
+
+                data = self.get_response(url, params)
+                self.id = data['response'][0]['id']
+        except:
+            print('Not valid data')
 
 
     # Задача №3
@@ -125,8 +140,8 @@ class User:
 def main():
     try:
         user_input = input('введите два id номера через пробел для поиска общих друзей: ').split()
-        user1 = User(int(user_input[0]))
-        user2 = User(int(user_input[1]))
+        user1 = User(user_input[0])
+        user2 = User(user_input[1])
 
         # вывод общих друзей в виде экземпляров класса с помощью метода  __and__(self, other)
         pprint(user1 & user2)
